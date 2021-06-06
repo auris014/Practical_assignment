@@ -137,25 +137,38 @@ kable(grv)
 ### 8. What is the distribution of those who celebrate across income ranges
 
 ```{r}
-dtb<-thanksgiving%>%
+dtb<-thanksgiving2%>%
   filter(celebrate=="Yes")%>%
-  count(family_income,sort = FALSE)
-dtb <-dtb[-c(11,12),]
+  count(family_income2,celebrate)
+dtb<-dtb[-c(11,12),]
+dtb<-subset(dtb,select = -c(celebrate))
+
+dtb$family_income2 <- as.numeric(dtb$family_income2)
+dtb$n <- as.numeric(dtb$n)
+colnames(dtb) <- c("Family Income","Number of People")
 kable(dtb)
 ```
 
 
 ### 9. Present this information in the most evident way on the data viz.
 
+```{r}
+dtb%>%ggplot(aes(x=`Family Income`,y=`Number of People`))+
+  geom_col(position = "dodge",colour="black",fill="#8cf9ff")+
+  theme_light(base_size = 10)+
+    labs(
+    x = "Income ranges",
+    y = "Number of People who celebrate",
+    fill = NULL)
+```
+
+
 
 ```{r}
-dtb%>%ggplot(aes(x=n,y=family_income))+
-  geom_col(position = "dodge",colour="black",fill="#8cf9ff")+
-  theme_light(base_size = 12)+
-    labs(
-    x = "Number of People who celebrate",
-    y = "Income Ranges",
-    fill = NULL)
+ggplot(thanksgiving2, aes(x = family_income2)) +
+  geom_histogram(aes(y = ..density..),
+                 colour = "blue", fill = "white") +
+  geom_density(alpha = .3, fill="#FF6655")
 ```
 
 
