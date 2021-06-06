@@ -39,7 +39,7 @@ kable(head(thanksgiving, n=10, "pipe"))
 ```{r}
 thanksgiving2<-mutate(thanksgiving,family_income2=parse_number(family_income))
 thanksgiving2<-thanksgiving2[order(thanksgiving2$family_income2),] 
-kable(thanksgiving2)
+kable(head(thanksgiving2,n=10))
 ```
 
 
@@ -59,9 +59,13 @@ skim(thanksgiving)
 
 ### 4. What is the number of people who celebrate?
 
+
 ```{r}
-kable(thanksgiving%>%count(celebrate,name="Number of People", sort=TRUE, ))
+people<-thanksgiving%>%count(celebrate,name="Number of People",sort = TRUE)
+people<-people[-c(2),]
+kable(people)
 ```
+
 
 ### 5. What are categories and stats for each main dish served and the method it is prepared?
 
@@ -145,14 +149,15 @@ kable(dtb)
 
 
 ```{r}
-dtb%>%ggplot(aes(x=family_income,y=n))+
+dtb%>%ggplot(aes(x=n,y=family_income))+
   geom_col(position = "dodge",colour="black",fill="#8cf9ff")+
-  theme_light(base_size = 6)+
+  theme_light(base_size = 12)+
     labs(
-    x = "Income ranges",
-    y = "Number of People who celebrate",
+    x = "Number of People who celebrate",
+    y = "Income Ranges",
     fill = NULL)
 ```
+
 
 
 ### 10. What are the most common pies, sides, and desserts? Present this information on a data viz
@@ -246,10 +251,10 @@ kable(pies_total)
 
 
 plotpies<-ggplot(pies_total,    
-              aes(x = Pies,
-                  y = People)) +
+              aes(x = People,
+                  y = Pies)) +
   geom_bar(stat="identity", position=position_dodge(),colour = "black",fill="pink")+
-  labs(y= "People", x = "Type of Pies", title="Most Common Thanksgiving Pies")+
+  labs(y= "Type of Pies", x = "People", title="Most Common Thanksgiving Pies")+
   theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (15)), 
                  legend.title = element_text(colour = "steelblue",  face = "bold.italic", family = "Helvetica"),
                  legend.text = element_text(face = "italic", colour="steelblue4",family = "Helvetica"), 
@@ -355,10 +360,10 @@ kable(sides_total)
 
 
 plotsides<-ggplot(sides_total,    
-              aes(x = Sides,
-                  y = People)) +
+              aes(x = People,
+                  y = Sides)) +
   geom_bar(stat="identity", position=position_dodge(),colour = "black",fill="pink")+
-  labs(y= "People", x = "Type of Sides", title="Most Common Thanksgiving Sides")+
+  labs(y= "Type of Sides", x = "People", title="Most Common Thanksgiving Sides")+
   theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (15)), 
                  legend.title = element_text(colour = "steelblue",  face = "bold.italic", family = "Helvetica"),
                  legend.text = element_text(face = "italic", colour="steelblue4",family = "Helvetica"), 
@@ -446,10 +451,10 @@ kable(dessert_total)
 
 
 plotdessert<-ggplot(dessert_total,    
-              aes(x = Dessert,
-                  y = People)) +
+              aes(x = People,
+                  y = Dessert)) +
   geom_bar(stat="identity", position=position_dodge(),colour = "black",fill="pink")+
-  labs(y= "People", x = "Type of Desserts", title="")+
+  labs(y= "Type of Desserts", x = "People", title="")+
   theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (15)), 
                  legend.title = element_text(colour = "steelblue",  face = "bold.italic", family = "Helvetica"),
                  legend.text = element_text(face = "italic", colour="steelblue4",family = "Helvetica"), 
