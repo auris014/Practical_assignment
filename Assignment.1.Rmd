@@ -1,0 +1,517 @@
+---
+#title: "Assignment.1"
+#author: "Aura Zuluaga"
+#date: "05/06/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(skimr)
+library(janitor)
+```
+
+# *Aura Zuluaga*
+## **s4630375**
+
+___
+
+# Assignment 1
+___
+
+![](/Users/aurazuluaga/Desktop/RStudio/Practical_assignment/Pic/IMG_0418 2.jpg){width=20%}
+
+### 1. Display the first 10 rows of the dataset using RMarkdown (1 marks)
+
+```{r}
+thanksgiving<-read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-11-20/thanksgiving_meals.csv")
+kable(head(thanksgiving, n=10, "pipe"))
+  
+```
+
+### 2. Use `fct_reorder` and `parse_number` functions to create a factor variable `family_income`
+
+### I prefered to use `order` because `parse_number` change the data to numeric, so instead of changing again the variable to factor, I prefered just to use `order` and work directly with numeric data. 
+
+```{r}
+thanksgiving2<-mutate(thanksgiving,family_income2=parse_number(family_income))
+thanksgiving2<-thanksgiving2[order(thanksgiving2$family_income2),] 
+kable(thanksgiving2)
+```
+
+
+### 3. Generate the general statistics of the dataset using `summary()` and `skim()` function (2 mark).
+
+### General Statistics using `summary()`
+
+```{r}
+summary(thanksgiving)
+```
+
+### General Statistics using `skim()`
+
+```{r}
+skim(thanksgiving)
+```
+
+### 4. What is the number of people who celebrate?
+
+```{r}
+kable(thanksgiving%>%count(celebrate,name="Number of People", sort=TRUE, ))
+```
+
+### 5. What are categories and stats for each main dish served and the method it is prepared?
+
+### Total Comparison
+
+```{r}
+main<-thanksgiving%>%count(main_dish,main_prep, name="Number of People", sort=TRUE)
+main<-main[-c(3,17,25,26),]
+kable(main)
+```
+
+### Comparison Main Dish
+
+```{r}
+main_dish<-thanksgiving%>%count(main_dish,name="Number of People",sort=TRUE)
+main_dish<-main_dish[-c(2,8),]
+kable(main_dish)
+```
+
+### Comparison Preparation Method
+
+```{r}
+main_prep<-thanksgiving%>%count(main_prep,name="Number of People",sort=TRUE)
+main_prep<-main_prep[-c(3,6),]
+kable(main_prep)
+```
+
+
+### 6. Create a data viz showing this in the most evident way. Provide your own legend and use themes.
+
+### Total Comparison
+
+```{r}
+ggp<-ggplot(main,    
+              aes(x = main_dish,
+                  y = `Number of People`,
+                  fill = main_prep)) +
+  geom_bar(position = "fill", stat = "identity",colour = "black")+
+scale_y_continuous(labels = scales::percent_format()) +
+  scale_fill_brewer(palette="Pastel1")+
+  labs(y= "Percentage of people", x = "Main dishes categories", title="Categories and stats for each main dish served & their preparation methods")+
+  theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (15)), 
+                 legend.title = element_text(colour = "steelblue",  face = "bold.italic", family = "Helvetica"),
+                 legend.text = element_text(face = "italic", colour="steelblue4",family = "Helvetica"), 
+                  axis.title = element_text(family = "Helvetica", size = (10), colour = "steelblue4"),
+                  axis.text = element_text(family = "Courier", colour = "cornflowerblue", size = (10)))
+ggp
+```
+
+
+### 7. How many use cranberry sauce? How many use gravy?
+
+### How many use cranberry sauce?
+
+```{r}
+crb<-thanksgiving%>%count(cranberry, name="People that use Cranberry Sauce", sort=TRUE)
+crb <-crb[-c(3,4),]%>%adorn_totals()
+kable(crb)
+```
+
+### How many use gravy?
+
+```{r}
+grv<-thanksgiving%>%count(gravy, name="People that use Gravy sauce", sort=TRUE)
+grv <-grv[-c(2,3),]
+kable(grv)
+```
+
+### 8. What is the distribution of those who celebrate across income ranges
+
+```{r}
+dtb<-thanksgiving%>%
+  filter(celebrate=="Yes")%>%
+  count(family_income,sort = FALSE)
+dtb <-dtb[-c(11,12),]
+kable(dtb)
+```
+
+
+### 9. Present this information in the most evident way on the data viz.
+
+
+```{r}
+dtb%>%ggplot(aes(x=family_income,y=n))+
+  geom_col(position = "dodge",colour="black",fill="#8cf9ff")+
+  theme_light(base_size = 6)+
+    labs(
+    x = "Income ranges",
+    y = "Number of People who celebrate",
+    fill = NULL)
+```
+
+
+### 10. What are the most common pies, sides, and desserts? Present this information on a data viz
+
+### Most Common Thanksgiving Pies + Data Vis
+
+```{r}
+pie1<-thanksgiving%>%
+  filter(!is.na(pie1))%>%
+  count(pie1)
+  colnames(pie1) <- c("pies","n")
+
+
+pie2<-thanksgiving%>%
+  filter(!is.na(pie2))%>%
+  count(pie2)
+  colnames(pie2) <- c("pies","n")
+
+
+pie3<-thanksgiving%>%
+  filter(!is.na(pie3))%>%
+  count(pie3)
+  colnames(pie3) <- c("pies","n")
+
+
+pie4<-thanksgiving%>%
+  filter(!is.na(pie4))%>%
+  count(pie4)
+  colnames(pie4) <- c("pies","n")
+
+
+pie5<-thanksgiving%>%
+  filter(!is.na(pie5))%>%
+  count(pie5)
+  colnames(pie5) <- c("pies","n")
+
+
+pie6<-thanksgiving%>%
+  filter(!is.na(pie6))%>%
+  count(pie6)
+  colnames(pie6) <- c("pies","n")
+
+
+pie7<-thanksgiving%>%
+  filter(!is.na(pie7))%>%
+  count(pie7)
+  colnames(pie7) <- c("pies","n")
+
+
+pie8<-thanksgiving%>%
+  filter(!is.na(pie8))%>%
+  count(pie8)
+  colnames(pie8) <- c("pies","n")
+
+
+pie9<-thanksgiving%>%
+  filter(!is.na(pie9))%>%
+  count(pie9)
+  colnames(pie9) <- c("pies","n")
+
+
+pie10<-thanksgiving%>%
+  filter(!is.na(pie10))%>%
+  count(pie10)
+  colnames(pie10) <- c("pies","n")
+
+
+pie11<-thanksgiving%>%
+  filter(!is.na(pie11))%>%
+  count(pie11)
+  colnames(pie11) <- c("pies","n")
+
+
+pie13<-thanksgiving%>%
+  filter(!is.na(pie13))%>%
+  count(pie13)%>%adorn_totals(name = "Others")
+  pie13 <-pie13[-c(1:61),]
+  colnames(pie13) <- c("pies","n")
+
+
+pies_total <- bind_rows(pie1,pie2,pie3,pie4,pie5,pie6,pie7,pie8,pie9,pie10,pie11,pie13)
+
+pies_total <- pies_total[order(-pies_total$n),]
+
+colnames(pies_total) <- c("Pies","People")
+
+kable(pies_total)
+
+
+
+
+
+plotpies<-ggplot(pies_total,    
+              aes(x = Pies,
+                  y = People)) +
+  geom_bar(stat="identity", position=position_dodge(),colour = "black",fill="pink")+
+  labs(y= "People", x = "Type of Pies", title="Most Common Thanksgiving Pies")+
+  theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (15)), 
+                 legend.title = element_text(colour = "steelblue",  face = "bold.italic", family = "Helvetica"),
+                 legend.text = element_text(face = "italic", colour="steelblue4",family = "Helvetica"), 
+                  axis.title = element_text(family = "Helvetica", size = (10), colour = "steelblue4"),
+                  axis.text = element_text(family = "Courier", colour = "cornflowerblue", size = (10)))
+plotpies
+```
+
+
+### Most Common Thanksgiving Sides + Data Vis
+
+```{r}
+side1<-thanksgiving%>%
+  filter(!is.na(side1))%>%
+  count(side1)
+  colnames(side1) <- c("sides","n")
+
+
+side2<-thanksgiving%>%
+  filter(!is.na(side2))%>%
+  count(side2)
+  colnames(side2) <- c("sides","n")
+
+
+side3<-thanksgiving%>%
+  filter(!is.na(side3))%>%
+  count(side3)
+  colnames(side3) <- c("sides","n")
+
+
+side4<-thanksgiving%>%
+  filter(!is.na(side4))%>%
+  count(side4)
+  colnames(side4) <- c("sides","n")
+
+
+side5<-thanksgiving%>%
+  filter(!is.na(side5))%>%
+  count(side5)
+  colnames(side5) <- c("sides","n")
+
+
+side6<-thanksgiving%>%
+  filter(!is.na(side6))%>%
+  count(side6)
+  colnames(side6) <- c("sides","n")
+
+
+side7<-thanksgiving%>%
+  filter(!is.na(side7))%>%
+  count(side7)
+  colnames(side7) <- c("sides","n")
+
+
+side8<-thanksgiving%>%
+  filter(!is.na(side8))%>%
+  count(side8)
+  colnames(side8) <- c("sides","n")
+
+
+side9<-thanksgiving%>%
+  filter(!is.na(side9))%>%
+  count(side9)
+  colnames(side9) <- c("sides","n")
+
+
+side10<-thanksgiving%>%
+  filter(!is.na(side10))%>%
+  count(side10)
+  colnames(side10) <- c("sides","n")
+
+
+side11<-thanksgiving%>%
+  filter(!is.na(side11))%>%
+  count(side11)
+  colnames(side11) <- c("sides","n")
+
+
+side12<-thanksgiving%>%
+  filter(!is.na(side12))%>%
+  count(side12)
+  colnames(side12) <- c("sides","n")
+  
+side13<-thanksgiving%>%
+  filter(!is.na(side13))%>%
+  count(side13)
+  colnames(side13) <- c("sides","n")
+  
+side15<-thanksgiving%>%
+  filter(!is.na(side15))%>%
+  count(side15)%>%adorn_totals(name = "Others")
+  side15 <-side15[-c(1:89),]
+  colnames(side15) <- c("sides","n")
+
+
+sides_total <- bind_rows(side1,side2,side3,side4,side5,side6,side7,side8,side9,side10,side11,side12,side13,side15)
+
+sides_total <- sides_total[order(-sides_total$n),]
+
+colnames(sides_total) <- c("Sides","People")
+
+kable(sides_total)
+
+
+plotsides<-ggplot(sides_total,    
+              aes(x = Sides,
+                  y = People)) +
+  geom_bar(stat="identity", position=position_dodge(),colour = "black",fill="pink")+
+  labs(y= "People", x = "Type of Sides", title="Most Common Thanksgiving Sides")+
+  theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (15)), 
+                 legend.title = element_text(colour = "steelblue",  face = "bold.italic", family = "Helvetica"),
+                 legend.text = element_text(face = "italic", colour="steelblue4",family = "Helvetica"), 
+                  axis.title = element_text(family = "Helvetica", size = (10), colour = "steelblue4"),
+                  axis.text = element_text(family = "Courier", colour = "cornflowerblue", size = (10)))
+plotsides
+```
+
+### Most Common Thanksgiving Desserts + Data Vis
+
+```{r}
+dessert1<-thanksgiving%>%
+  filter(!is.na(dessert1))%>%
+  count(dessert1)
+  colnames(dessert1) <- c("dessert","n")
+
+
+dessert2<-thanksgiving%>%
+  filter(!is.na(dessert2))%>%
+  count(dessert2)
+  colnames(dessert2) <- c("dessert","n")
+
+
+dessert3<-thanksgiving%>%
+  filter(!is.na(dessert3))%>%
+  count(dessert3)
+  colnames(dessert3) <- c("dessert","n")
+
+
+dessert4<-thanksgiving%>%
+  filter(!is.na(dessert4))%>%
+  count(dessert4)
+  colnames(dessert4) <- c("dessert","n")
+
+
+dessert5<-thanksgiving%>%
+  filter(!is.na(dessert5))%>%
+  count(dessert5)
+  colnames(dessert5) <- c("dessert","n")
+
+
+dessert6<-thanksgiving%>%
+  filter(!is.na(dessert6))%>%
+  count(dessert6)
+  colnames(dessert6) <- c("dessert","n")
+
+
+dessert7<-thanksgiving%>%
+  filter(!is.na(dessert7))%>%
+  count(dessert7)
+  colnames(dessert7) <- c("dessert","n")
+
+
+dessert8<-thanksgiving%>%
+  filter(!is.na(dessert8))%>%
+  count(dessert8)
+  colnames(dessert8) <- c("dessert","n")
+
+
+dessert9<-thanksgiving%>%
+  filter(!is.na(dessert9))%>%
+  count(dessert9)
+  colnames(dessert9) <- c("dessert","n")
+
+
+dessert10<-thanksgiving%>%
+  filter(!is.na(dessert10))%>%
+  count(dessert10)
+  colnames(dessert10) <- c("dessert","n")
+
+dessert12<-thanksgiving%>%
+  filter(!is.na(dessert12))%>%
+  count(dessert12)%>%adorn_totals(name = "Others")
+  dessert12 <-dessert12[-c(1:92),]
+  colnames(dessert12) <- c("dessert","n")
+
+
+dessert_total <- bind_rows(dessert1,dessert2,dessert3,dessert4,dessert5,dessert6,dessert7,dessert8,dessert9,dessert10,dessert12)
+
+dessert_total <- dessert_total[order(-dessert_total$n),]
+
+colnames(dessert_total) <- c("Dessert","People")
+
+kable(dessert_total)
+
+
+plotdessert<-ggplot(dessert_total,    
+              aes(x = Dessert,
+                  y = People)) +
+  geom_bar(stat="identity", position=position_dodge(),colour = "black",fill="pink")+
+  labs(y= "People", x = "Type of Desserts", title="")+
+  theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (15)), 
+                 legend.title = element_text(colour = "steelblue",  face = "bold.italic", family = "Helvetica"),
+                 legend.text = element_text(face = "italic", colour="steelblue4",family = "Helvetica"), 
+                  axis.title = element_text(family = "Helvetica", size = (10), colour = "steelblue4"),
+                  axis.text = element_text(family = "Courier", colour = "cornflowerblue", size = (10)))
+plotdessert
+```
+
+
+### 12. How do the servings differ by income?
+
+#df %>% filter(<Column Name Here> != "Colum value here")
+
+```{r}
+servings<-thanksgiving%>%count(main_dish,family_income, name="Number of People", sort=TRUE)
+
+servings<-servings%>%filter(!is.na(servings))
+
+servings<-servings[-c(4,11,19,27,29,33,39,49,50,51,52,53,57,62),]
+
+kable(servings)
+
+serving_no_turkey<-servings%>%filter(main_dish!='Turkey')
+
+```
+
+
+### 13. Present this information on a data viz
+
+```{r}
+srv<-ggplot(servings,    
+              aes(x = family_income,
+                  y = `Number of People`,
+                  fill = main_dish)) +
+  geom_bar(position = "fill", stat = "identity",colour = "black")+
+scale_y_continuous(labels = scales::percent_format()) +
+  scale_fill_brewer(palette="Pastel1")+
+  labs(y= "Percentage of people", x = "Family Income", title="Types of Servings differing by income")+
+  theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (15)), 
+                 legend.title = element_text(colour = "steelblue",  face = "bold.italic", family = "Helvetica"),
+                 legend.text = element_text(face = "italic", colour="steelblue4",family = "Helvetica"), 
+                  axis.title = element_text(family = "Helvetica", size = (10), colour = "steelblue4"),
+                  axis.text = element_text(family = "Courier", colour = "cornflowerblue", size = (10)))
+srv
+
+```
+
+
+```{r}
+srv2<-ggplot(serving_no_turkey,    
+              aes(x = family_income,
+                  y = `Number of People`,
+                  fill = main_dish)) +
+  geom_bar(position = "fill", stat = "identity",colour = "black")+
+scale_y_continuous(labels = scales::percent_format()) +
+  scale_fill_brewer(palette="Pastel2")+
+  labs(y= "Percentage of people", x = "Family Income", title="Types of Servings differing by income without Turkey")+
+  theme(plot.title = element_text(family = "Helvetica", face = "bold", size = (15)), 
+                 legend.title = element_text(colour = "steelblue",  face = "bold.italic", family = "Helvetica"),
+                 legend.text = element_text(face = "italic", colour="steelblue4",family = "Helvetica"), 
+                  axis.title = element_text(family = "Helvetica", size = (10), colour = "steelblue4"),
+                  axis.text = element_text(family = "Courier", colour = "cornflowerblue", size = (10)))
+srv2
+```
+
