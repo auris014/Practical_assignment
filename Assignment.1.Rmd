@@ -111,7 +111,8 @@ scale_y_continuous(labels = scales::percent_format()) +
                  legend.title = element_text(colour = "steelblue",  face = "bold.italic", family = "Helvetica"),
                  legend.text = element_text(face = "italic", colour="steelblue4",family = "Helvetica"), 
                   axis.title = element_text(family = "Helvetica", size = (10), colour = "steelblue4"),
-                  axis.text = element_text(family = "Courier", colour = "cornflowerblue", size = (10)))
+                  axis.text = element_text(family = "Courier", colour = "cornflowerblue", size = (10)),
+                  axis.text.x = element_text(angle = 90,hjust = 1))
 ggp
 ```
 
@@ -510,7 +511,8 @@ scale_y_continuous(labels = scales::percent_format()) +
                  legend.title = element_text(colour = "steelblue",  face = "bold.italic", family = "Helvetica"),
                  legend.text = element_text(face = "italic", colour="steelblue4",family = "Helvetica"), 
                   axis.title = element_text(family = "Helvetica", size = (10), colour = "steelblue4"),
-                  axis.text = element_text(family = "Courier", colour = "cornflowerblue", size = (10)))
+                  axis.text = element_text(family = "Courier", colour = "cornflowerblue", size = (7)),
+                  axis.text.x = element_text(angle = 90,hjust = 1))
 srv
 
 ```
@@ -529,7 +531,8 @@ scale_y_continuous(labels = scales::percent_format()) +
                  legend.title = element_text(colour = "steelblue",  face = "bold.italic", family = "Helvetica"),
                  legend.text = element_text(face = "italic", colour="steelblue4",family = "Helvetica"), 
                   axis.title = element_text(family = "Helvetica", size = (10), colour = "steelblue4"),
-                  axis.text = element_text(family = "Courier", colour = "cornflowerblue", size = (10)))
+                  axis.text = element_text(family = "Courier", colour = "cornflowerblue", size = (7)),
+                  axis.text.x = element_text(angle = 90,hjust = 1))
 srv2
 ```
 
